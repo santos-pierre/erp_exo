@@ -1,12 +1,13 @@
-<script lang="typescript">
+<script lang="ts">
 	import type { NavLink } from 'src/types/NavLink';
 	import { linear } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
 
-	let open = false;
+	export let open: boolean;
 
-	export const router = false;
+	const dispatch = createEventDispatcher();
 
 	export let links: NavLink[];
 
@@ -23,15 +24,13 @@
 	};
 </script>
 
-<button on:click={() => (open = true)}>Open</button>
-
 {#if open}
 	<div class="fixed inset-0 z-40 flex md:hidden" role="dialog" aria-modal="true">
 		<div
 			class="fixed inset-0 bg-gray-600 bg-opacity-75"
 			aria-hidden="true"
 			transition:fade={{ duration: 300, easing: linear }}
-			on:click={() => (open = false)}
+			on:click={() => dispatch('close')}
 		/>
 		<div class="relative flex w-full max-w-xs flex-1 flex-col bg-gray-800" transition:translate>
 			<div
@@ -41,7 +40,7 @@
 				<button
 					type="button"
 					class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-					on:click={() => (open = false)}
+					on:click={() => dispatch('close')}
 				>
 					<span class="sr-only">Close sidebar</span>
 					<!-- Heroicon name: outline/x -->
